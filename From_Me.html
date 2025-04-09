@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌻🐶🐱</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: "Prompt", sans-serif;
+      background: linear-gradient(135deg, #f0f8ff 0%, #ffb6c1 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hidden-video {
+      display: none;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      color: #ff6f61;
+      font-size: 48px;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      padding: 18px 36px;
+      font-size: 20px;
+      background-color: #ff9999;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      font-family: "Prompt", sans-serif;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #ff6f61;
+      transform: scale(1.05);
+    }
+
+    .sound-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 24px;
+      color: #ff6f61;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 240, 245, 0.95);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      font-size: 18px;
+      max-width: 90%;
+      /* เพิ่มความกว้างสูงสุดเพื่อให้พอดีกับหน้าจอมือถือ */
+      width: 100%;
+      /* ปรับความกว้างให้เต็มหน้าจอ */
+      text-align: center;
+      line-height: 1.6;
+      backdrop-filter: blur(5px);
+      z-index: 10;
+      box-sizing: border-box;
+      /* ให้แน่ใจว่า padding จะไม่ทำให้ขนาดเกินที่กำหนด */
+    }
+
+    .popup p {
+      margin: 10px 0;
+      color: #333;
+    }
+
+    /* เพิ่มระยะห่างและขนาดของปุ่ม */
+    .popup button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #ff9999;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .popup button:hover {
+      background-color: #ff6f61;
+      transform: scale(1.05);
+    }
+
+    /* หัวใจลอย */
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0);
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+    }
+
+    /* ปรับขนาดของข้อความในปุ่มกดเปิดเสียง */
+    .sound-toggle p {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <iframe class="hidden-video" width="560" height="315"
+    src="https://www.youtube.com/embed/j4-hDSUtql8?autoplay=1&mute=0" frameborder="0" allow="autoplay; encrypted-media"
+    allowfullscreen></iframe>
+
+  <div class="container">
+    <h1>🐾 มากดปุ่มนี้กัน 🌻</h1>
+    <button onclick="showPopup1()">กดที่นี่สิ!</button>
+  </div>
+
+  <!-- Popup 1 -->
+  <div id="popup1" class="popup">
+    <p>🌻🐱 คุยกันมา 3 อาทิตย์แล้วนะฮะ</p>
+    <p>เป็นยังไงบ้าง คุณโอเคหรือเปล่านะ</p>
+    <p>ช่วงเวลา 3 อาทิตย์ที่คุยกันมา ผมรู้สึกดีมากๆ เลยนะ ไม่คิดมาก่อนว่าเราจะเข้ากันได้ขนาดนี้
+      รู้สึกแปลกใจแต่ก็อบอุ่นใจทุกครั้งที่ได้คุย ขอบคุณที่เห็นอะไรน่ารักๆ แล้วนึกถึงผมตลอด มันเป็นความรู้สึกเล็กๆ
+      ที่พิเศษมากฮะ อยู่เป็นความสบายใจ ให้พวกเราได้อยู่กับตัวเองในเวอร์ชั่นที่มีรอยยิ้มตลอดเวลาไปด้วยกันนะ 🌻🐶</p>
+    <button onclick="showPopup2()">ต่อไป</button>
+  </div>
+
+  <!-- Popup 2 -->
+  <div id="popup2" class="popup">
+    <p>🐶 มีอะไรจะถามคุณค้าบ 😺</p>
+    <button onclick="showPopup3()">ต่อไป</button>
+  </div>
+
+  <!-- Popup 3 -->
+  <div id="popup3" class="popup">
+    <p>💕 Is it ok if I call you mine? 💕</p>
+    <button onclick="showPopup4()">ต่อไป</button>
+  </div>
+
+  <!-- Popup 4 -->
+  <div id="popup4" class="popup">
+    <p>🐱 แต่ถ้าคุณยังไม่พร้อมไม่เป็นไรนะค้าบ</p>
+    <p>ไม่รีบร้อน ค่อยๆไปได้ฮะ 🌻🐶</p>
+    <button onclick="showPopup5()">ต่อไป</button>
+  </div>
+
+  <!-- Popup 5 (เลือกตกลงหรือไม่ตกลง) -->
+  <div id="popup5" class="popup">
+    <p>💕 คุณคิดยังไงกับคำถามที่แล้ว? 💕</p>
+    <button onclick="handleDecision(true)">ตกลง</button>
+    <button onclick="handleDecision(false)">ไม่ตกลง</button>
+  </div>
+
+  <i class="fas fa-volume-up sound-toggle" id="soundToggle" onclick="toggleSound()">
+    <p>กดเปิดเสียงหน่อยฮะ</p>
+  </i>
+
+  <script>
+    let isMuted = false; // เริ่มต้นด้วยการเปิดเสียง
+    const iframe = document.querySelector('iframe');
+    const soundToggleIcon = document.getElementById('soundToggle');
+
+    function toggleSound() {
+      const muteParam = isMuted ? 'mute=1' : 'mute=0'; // ใช้ mute=0 สำหรับเปิดเสียง
+      const src = `https://www.youtube.com/embed/j4-hDSUtql8?si=c-gT5o-FG83whGcQ&autoplay=1&${muteParam}`;
+      iframe.src = src;
+      isMuted = !isMuted; // เปลี่ยนสถานะการเปิด/ปิดเสียง
+      soundToggleIcon.classList.toggle('fa-volume-up', !isMuted); // เปลี่ยนไอคอน
+      soundToggleIcon.classList.toggle('fa-volume-mute', isMuted); // ไอคอนของเสียงปิด
+    }
+
+    function showPopup1() {
+      document.getElementById("popup1").style.display = "block";
+    }
+
+    function showPopup2() {
+      document.getElementById("popup1").style.display = "none";
+      document.getElementById("popup2").style.display = "block";
+    }
+
+    function showPopup3() {
+      document.getElementById("popup2").style.display = "none";
+      document.getElementById("popup3").style.display = "block";
+    }
+
+    function showPopup4() {
+      document.getElementById("popup3").style.display = "none";
+      document.getElementById("popup4").style.display = "block";
+    }
+
+    function showPopup5() {
+      document.getElementById("popup4").style.display = "none";
+      document.getElementById("popup5").style.display = "block";
+    }
+
+    function handleDecision(isAgreed) {
+      if (isAgreed) {
+        alert("💗 อยู่ด้วยกันแบบนี้นานๆ นะค้าบ ขอบคุณที่เข้ามาในชีวิตผมนะฮะ 🌈");
+      } else {
+        alert("ไม่เป็นไรนะฮะ ค่อยๆไป 💗");
+      }
+      closeAll();
+    }
+
+    function closeAll() {
+      document.getElementById("popup1").style.display = "none";
+      document.getElementById("popup2").style.display = "none";
+      document.getElementById("popup3").style.display = "none";
+      document.getElementById("popup4").style.display = "none";
+      document.getElementById("popup5").style.display = "none";
+    }
+
+    // หัวใจลอย
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.textContent = "💖";
+      heart.style.position = "fixed";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animation = "floatUp 3s ease-out forwards";
+      document.body.appendChild(heart);
+      setTimeout(() => {
+        heart.remove();
+      }, 3000);
+    }
+
+    // สร้างหัวใจทุกๆ 2 วินาที
+    setInterval(createHeart, 2000);
+  </script>
+</body>
+
+</html>
