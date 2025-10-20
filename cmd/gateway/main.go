@@ -18,8 +18,6 @@ import (
 	"github.com/example/go-adaptive-gw/internal/risk"
 )
 
-
-
 func BackendRoutes() http.Handler {
 	r := chi.NewRouter()
 	r.Get("/catalog/list", func(w http.ResponseWriter, r *http.Request) {
@@ -34,44 +32,51 @@ func BackendRoutes() http.Handler {
 	return r
 }
 
+// adaptiveMiddleware ประมวลผลคำขอพร้อมส่งข้อมูลให้ Risk Analyzer
 func adaptiveMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Extract metadata
-	meta := profiler.Extract(r)
+		// ดึงข้อมูลเมตาจาก request
+		meta := profiler.Extract(r)
 
-	// NOTE: In this starter, ReqPerMin is not tracked; production should use Redis.
-	meta.ReqPerMin = 1
+		// ใช้ ML Risk Analyzer ประเมินความเสี่ยง
+		score := risk.MLScore(meta)
+		level := risk.Level(score)
+		dec := policy.Decide(level)
 
-	score := risk.Score(meta)
-	level := risk.Level(score)
-	dec := policy.Decide(level)
+		// เพิ่ม header เพื่อ debug
+		w.Header().Set("X-Risk-Score", fmt.Sprint(score))
+		w.Header().Set("X-Risk-Level", level)
 
-	w.Header().Set("X-Risk-Score", fmt.Sprint(score))
-	w.Header().Set("X-Risk-Level", level)
+		// ใช้นโยบาย enforcement ตามระดับ risk
+		enf := enforcement.Apply(dec.RateLimit)
+		enf(next).ServeHTTP(w, r)
 
-	// Apply enforcement (wrap next)
-	enf := enforcement.Apply(dec.RateLimit)
-	enf(next).ServeHTTP(w, r)
+		// เก็บ log metadata เพื่อนำไปเทรนภายหลัง
+		meta.RiskScore = score
+		profiler.Export(meta)
 	})
 }
 
 func main() {
-	import "github.com/example/go-adaptive-gw/internal/enforcement"
+	// เริ่มเชื่อมต่อ Redis (สำหรับ rate-limit และ profiling)
+	profiler.InitRedis("redis:6379")
+	enforcement.InitRedis("redis:6379")
+
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	// Basic health endpoint
+	// Endpoint ตรวจสอบสถานะระบบ
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("gw:ok"))
 	})
 
-	// Static baseline mount
+	// Static baseline routes (ไม่ผ่าน ML)
 	r.Mount("/static", BackendRoutes())
 
-	// Adaptive mount
+	// Adaptive routes (ผ่าน ML Risk Analyzer)
 	r.Group(func(r chi.Router) {
 		r.Use(adaptiveMiddleware)
 		r.Mount("/api", BackendRoutes())
@@ -82,7 +87,7 @@ func main() {
 		Handler: r,
 	}
 
-	// graceful shutdown
+	// Graceful shutdown
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("listen: %s\n", err)
@@ -93,8 +98,9 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	_ = srv.Shutdown(ctx)
-	log.Println("Shutdown")
+	log.Println("Gateway shutdown complete")
 }
