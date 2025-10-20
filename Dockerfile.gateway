@@ -1,0 +1,11 @@
+# Build and run gateway
+FROM golang:1.21-alpine AS build
+WORKDIR /app
+COPY . .
+RUN go env -w GOPROXY=https://proxy.golang.org,direct
+RUN go build -o /gateway ./cmd/gateway
+
+FROM alpine:3.18
+COPY --from=build /gateway /gateway
+EXPOSE 8080
+ENTRYPOINT ["/gateway"]
